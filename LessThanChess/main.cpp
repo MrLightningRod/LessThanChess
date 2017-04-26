@@ -1,22 +1,13 @@
 #include <SFML/Graphics.hpp>
+#include "Elements.h"
+#include "Game.h"
+#include "MainMenu.h"
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1200, 800), "LessThanChess", sf::Style::Titlebar | sf::Style::Close);
+	sf::RenderWindow window(sf::VideoMode(_WINDOW_WIDTH_, _WINDOW_HEIGHT_), "LessThanChess", sf::Style::Titlebar | sf::Style::Close);
 	window.setVerticalSyncEnabled(true);
 
-	while (window.isOpen())
-	{
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window.close();
-		}
-
-		window.clear();
-		window.display();
-	}
-
+	Game game = MainMenu(window);
 	return 0;
 }
