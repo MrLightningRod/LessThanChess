@@ -8,6 +8,7 @@ Button::~Button()
 
 Button::Button()
 {
+	std::cout << "I'm here" << std::endl;
 	active = true;
 	trigger = false;
 	triggered = false;
@@ -111,6 +112,10 @@ void Button::setTriggered(bool trig)
 	{
 		buttonBody.setFillColor(_BUTTON_TRIGGERED_COLOR_);
 	}
+	else
+	{
+		buttonBody.setFillColor(_BUTTON_COLOR_);
+	}
 }
 
 void Button::setCover(bool cov)
@@ -182,4 +187,11 @@ void ButtonsManager::draw(sf::RenderWindow& window)
 	{
 		(*it)->draw(window);
 	}
+}
+
+void Button::setText(sf::String text)
+{
+	buttonText.setString(text);
+	textRect = buttonText.getGlobalBounds();
+	buttonText.setPosition(buttonBody.getPosition() + buttonBody.getSize() / 2.f - sf::Vector2f(textRect.width / 2.f, textRect.height));
 }
