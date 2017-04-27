@@ -51,12 +51,18 @@ int Figure::getOwner()
 	return owner;
 }
 
+int Figure::getType()
+{
+	return type;
+}
+
 Square::Square()
 {
 	whiteFigure = NULL;
 	blackFigure = NULL;
 	squareBody.setSize(sf::Vector2f(80, 80));
 	squareBody.setPosition(sf::Vector2f(100, 100));
+	this->resetStat();
 }
 
 Square::~Square()
@@ -116,5 +122,119 @@ void Square::draw(sf::RenderWindow& window)
 	if (blackFigure != NULL)
 	{
 		blackFigure->draw(window);
+	}
+}
+
+void Square::resetStat()
+{
+	stat.movingBlackIn = false;
+	stat.movingBlackOut = false;
+	stat.movingWhiteIn = false;
+	stat.movingWhiteOut = false;
+	stat.underBlackAttack = false;
+	stat.underWhiteAttack = false;
+}
+
+Board::Board()
+{
+	boardBody.setFillColor(_BUTTON_COLOR_);
+	boardBody.setSize(sf::Vector2f(640, 640));
+	boardBody.setPosition(sf::Vector2f(180, 20));
+	boardBody.setOutlineThickness(_BUTTON_OUTLINE_THICKNESS_);
+	boardBody.setOutlineColor(_BUTTON_OUTLINE_COLOR_);
+	player = _PLAYER_NONE_;
+	for (int j = 0; j < 8; j++)
+		for (int i = 0; i < 8; i++)
+		{
+			sf::Vector2f position(sf::Vector2f(80 * i, 80 * (7 - j)) + boardBody.getPosition());
+			squares[i][j].setPosition(position);
+			if ((i + j) % 2 == 0)
+			{
+				squares[i][j].setColor(_SQUARE_BLACK_COLOR_);
+				squares[i][j].squareColor = _SQUARE_BLACK_;
+			}
+			else
+			{
+				squares[i][j].setColor(_SQUARE_WHITE_COLOR_);
+				squares[i][j].squareColor = _SQUARE_WHITE_;
+			}
+		}
+}
+
+Board::~Board()
+{
+
+}
+
+void Board::draw(sf::RenderWindow& window)
+{
+	window.draw(boardBody);
+	for (int i = 0; i < 8; i++)
+		for (int j = 0; j < 8; j++)
+			squares[i][j].draw(window);
+}
+
+void Board::setPlayer(int pl)
+{
+	player = pl;
+	for (int j = 0; j < 8; j++)
+		for (int i = 0; i < 8; i++)
+		{
+			int x = i;
+			int y = j;
+			if (player == _PLAYER_WHITE_)
+			{
+				y = 7 - y;
+			}
+			else
+			{
+				x = 7 - x;
+			}
+			sf::Vector2f position(sf::Vector2f(80 * x, 80 * y) + boardBody.getPosition());
+			squares[i][j].setPosition(position);
+		}
+}
+
+void Board::load(std::ifstream& in)
+{
+	int owner;
+	int type;
+	int num_figure = 0;
+	for (int j = 0; j < 8; j++)
+		for (int i = 0; i < 8; i++)
+		{
+			in >> owner >> type;
+			if ((owner != _PLAYER_NONE_) && (type != _FIGURE_NONE_))
+			{
+				figures[num_figure].setTypeOwn(type, owner);
+				squares[i][j].setFigure(&figures[num_figure]);
+				num_figure++;
+			}
+		}
+}
+
+void Board::save(std::ofstream & out)
+{
+	for (int j = 0; j < 8; j++)
+	{
+		for (int i = 0; i < 8; i++)
+		{
+			if ((squares[i][j].getBlackFigure() == NULL) && (squares[i][j].getWhiteFigure() == NULL))
+			{
+				out << 2 << " " << 2 << " ";
+			}
+			else
+			{
+				if (squares[i][j].getBlackFigure() != NULL)
+				{
+					out << squares[i][j].getBlackFigure()->getOwner() << " " << squares[i][j].getBlackFigure()->getType() << " ";
+				}
+				else
+				{
+					out << squares[i][j].getWhiteFigure()->getOwner() << " " << squares[i][j].getWhiteFigure()->getType() << " ";
+				}
+			}
+		}
+		out << std::endl;
 	}
 }

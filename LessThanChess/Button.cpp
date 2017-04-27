@@ -8,7 +8,6 @@ Button::~Button()
 
 Button::Button()
 {
-	std::cout << "I'm here" << std::endl;
 	active = true;
 	trigger = false;
 	triggered = false;

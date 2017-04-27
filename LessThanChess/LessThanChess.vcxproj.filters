@@ -61,4 +61,12 @@
       <Filter>Файлы ресурсов</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="new.sav">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="save.sav">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+  </ItemGroup>
 </Project>

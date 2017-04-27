@@ -46,7 +46,7 @@ Settings MainMenu(sf::RenderWindow& window)
 	buttList.push(&connect);
 
 	Button load("LOAD", sf::Vector2f(_WINDOW_WIDTH_ / 2.f - 320, 360), sf::Vector2f(640, 50));
-	load.setActive(false);
+	load.setActive(true);
 	buttList.push(&load);
 
 	Button quit("QUIT", sf::Vector2f(_WINDOW_WIDTH_ / 2.f - 320, 440), sf::Vector2f(640, 50));
@@ -101,6 +101,11 @@ Settings MainMenu(sf::RenderWindow& window)
 						medium.setTriggered(false);
 						hard.setTriggered(true);
 						result.difficulty = _GAME_DIF_HARD_;
+					}
+					if (clicked == &load)
+					{
+						result.mode = _GAME_LOAD_;
+						return result;
 					}
 				}
 			}
