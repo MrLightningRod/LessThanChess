@@ -3,15 +3,15 @@
 #include "Constants.h"
 #include <iostream>
 
-Game MainMenu(sf::RenderWindow& window)
+Settings MainMenu(sf::RenderWindow& window)
 {
-	Game result;
+	Settings result;
 	result.mode = _GAME_OFFLINE_;
 	result.difficulty = _GAME_DIF_EASY_;
 	ButtonsManager buttList;
 
 
-	// page layout (it's not ok, but I'll fix it in future, lol)
+	// page layout (it's not ok, but I'll fix it in the future, lol)
 	Button start("START", sf::Vector2f(_WINDOW_WIDTH_ / 2.f - 320, 100), sf::Vector2f(640, 50));
 	buttList.push(&start);
 
@@ -21,11 +21,11 @@ Game MainMenu(sf::RenderWindow& window)
 	buttList.push(&easy);
 
 	Button medium("MEDIUM", sf::Vector2f(_WINDOW_WIDTH_ / 2.f - 100, 160), sf::Vector2f(200, 40));
-	medium.setActive(false);
+	medium.setTrigger(true);
 	buttList.push(&medium);
 
 	Button hard("HARD", sf::Vector2f(_WINDOW_WIDTH_ / 2.f + 120, 160), sf::Vector2f(200, 40));
-	hard.setActive(false);
+	hard.setTrigger(true);
 	buttList.push(&hard);
 
 	Button offline("OFFLINE", sf::Vector2f(_WINDOW_WIDTH_ / 2.f - 320, 210), sf::Vector2f(200, 40));
@@ -81,11 +81,35 @@ Game MainMenu(sf::RenderWindow& window)
 						window.close();
 						return result;
 					}
+					if (clicked == &easy)
+					{
+						easy.setTriggered(true);
+						medium.setTriggered(false);
+						hard.setTriggered(false);
+						result.difficulty = _GAME_DIF_EASY_;
+					}
+					if (clicked == &medium)
+					{
+						easy.setTriggered(false);
+						medium.setTriggered(true);
+						hard.setTriggered(false);
+						result.difficulty = _GAME_DIF_MEDIUM_;
+					}
+					if (clicked == &hard)
+					{
+						easy.setTriggered(false);
+						medium.setTriggered(false);
+						hard.setTriggered(true);
+						result.difficulty = _GAME_DIF_HARD_;
+					}
 				}
 			}
 			
 			if (event.type == sf::Event::Closed)
+			{
+				result.mode = _GAME_OUT_;
 				window.close();
+			}
 		}
 
 

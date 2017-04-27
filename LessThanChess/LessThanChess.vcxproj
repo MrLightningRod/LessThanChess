@@ -123,16 +123,21 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Board.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Elements.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Board.h" />
     <ClInclude Include="MainMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="MuktaVaani-Regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="chessfig.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

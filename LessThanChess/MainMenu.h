@@ -2,4 +2,4 @@
 #include <SFML/Graphics.hpp>
 #include "Game.h"
 
-Game MainMenu(sf::RenderWindow& window);
+Settings MainMenu(sf::RenderWindow& window);

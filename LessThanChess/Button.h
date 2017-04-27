@@ -37,6 +37,7 @@ public:
 	void setTriggered(bool trig);
 	void setCover(bool cov);
 	bool contains(sf::Vector2f pos);
+	void setText(sf::String text);
 };
 
 class ButtonsManager
