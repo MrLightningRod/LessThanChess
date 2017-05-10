@@ -36,6 +36,15 @@ void GameStart(Settings& game, sf::RenderWindow& window)
 	surrender.setActive(false);
 	buttList.push(&surrender);
 
+	//testing
+	/*
+	sf::Vector2i pos;
+	pos.x = 1;
+	pos.y = 1;
+	board.setAvailable(pos);
+	*/
+	//
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -45,6 +54,10 @@ void GameStart(Settings& game, sf::RenderWindow& window)
 			{
 				sf::Vector2f mouse_position(event.mouseMove.x, event.mouseMove.y);
 				buttList.onCover(mouse_position);
+				if (board.contains(mouse_position))
+				{
+					board.onCover(mouse_position);
+				}
 			}
 
 			if (event.type == sf::Event::MouseButtonPressed)
@@ -52,6 +65,14 @@ void GameStart(Settings& game, sf::RenderWindow& window)
 				if (event.mouseButton.button == sf::Mouse::Left)
 				{
 					sf::Vector2f mouse_position(event.mouseButton.x, event.mouseButton.y);
+
+					if (board.contains(mouse_position))
+					{
+						board.onClick(mouse_position);
+						if (board.movesDone >= game.difficulty)
+							board.nextPlayer();
+					}
+
 					Button* clicked = buttList.onClick(mouse_position);
 					if (clicked == &save)
 					{
@@ -66,6 +87,11 @@ void GameStart(Settings& game, sf::RenderWindow& window)
 
 			if (event.type == sf::Event::Closed)
 			{
+				std::ofstream savef;
+				savef.open(_SAVE_BOARD_FILE_);
+				savef << game.mode << " " << game.difficulty << std::endl;
+				board.save(savef);
+				savef.close();
 				game.mode = _GAME_OUT_;
 				window.close();
 			}
