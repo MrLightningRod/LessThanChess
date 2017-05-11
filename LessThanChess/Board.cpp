@@ -341,7 +341,6 @@ void Board::setAvailable(sf::Vector2i start)
 	bool dont_stop;
 	int add_y;
 	figure = squares[start.x][start.y].getFigure(player);
-	std::cout << figure->hasMoved << std::endl;
 	//PAWN
 	if (figure->getType() == _FIGURE_PAWN_)
 	{
@@ -598,6 +597,7 @@ void Board::onClick(sf::Vector2f pos)
 				squares[x][y].stat.movingIn[player] = true;
 				squares[x][y].stat.underAttack[player] = true;
 
+				/*
 				//PAWN'S NON ATTACK MOVE
 				if (squares[start_x][start_y].getFigure(player)->getType() == _FIGURE_PAWN_)
 				{
@@ -607,6 +607,7 @@ void Board::onClick(sf::Vector2f pos)
 					}
 				}
 				//
+				*/
 
 				movesDone++;
 				moveStarted = false;
@@ -628,6 +629,10 @@ void Board::countMoves()
 			int start_x = moves[pl][j].start.x;
 			int start_y = moves[pl][j].start.y;
 			squares[end_x][end_y].setFigure(squares[start_x][start_y].getFigure(pl));
+			if ((squares[end_x][end_y].figure[pl]->getType() == _FIGURE_PAWN_) && (end_y == (7 - pl * 7)))
+			{
+				squares[end_x][end_y].figure[pl]->setTypeOwn(_FIGURE_QUENN_, pl);
+			}
 			squares[end_x][end_y].figure[pl]->hasMoved = true;
 			squares[start_x][start_y].figure[pl] = NULL;
 			int other_pl = (pl + 1) % 2;
@@ -636,11 +641,11 @@ void Board::countMoves()
 			{
 				if (squares[end_x][end_y].figure[pl]->getType() == _FIGURE_KING_)
 				{
-					if (winner == _PLAYER_NONE_)
+					if ((winner == pl) || (winner == _PLAYER_BOTH_))
 					{
 						winner = _PLAYER_BOTH_;
 					}
-					else
+					if (winner == _PLAYER_NONE_)
 					{
 						winner = other_pl;
 					}
@@ -662,11 +667,11 @@ void Board::countMoves()
 			{
 				if (squares[end_x][end_y].figure[pl]->getType() == _FIGURE_KING_)
 				{
-					if (winner == _PLAYER_NONE_)
+					if ((winner == pl) || (winner == _PLAYER_BOTH_))
 					{
 						winner = _PLAYER_BOTH_;
 					}
-					else
+					if (winner == _PLAYER_NONE_)
 					{
 						winner = other_pl;
 					}
@@ -682,11 +687,11 @@ void Board::countMoves()
 					if (squares[k][l].figure[pl] != NULL)
 						if (squares[k][l].figure[pl]->getType() == _FIGURE_KING_)
 						{
-							if (winner == _PLAYER_NONE_)
+							if ((winner == pl) || (winner == _PLAYER_BOTH_))
 							{
-							winner = _PLAYER_BOTH_;
+								winner = _PLAYER_BOTH_;
 							}
-							else
+							if (winner == _PLAYER_NONE_)
 							{
 								winner = (pl + 1) % 2;
 							}
@@ -712,4 +717,9 @@ void Board::nextPlayer()
 	setPlayer((player + 1) % 2);
 	if (player == _PLAYER_WHITE_)
 		countMoves();
+}
+
+int Board::getPlayer()
+{
+	return player;
 }

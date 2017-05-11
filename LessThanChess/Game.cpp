@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Screen.h"
 
 void GameStart(Settings& game, sf::RenderWindow& window)
 {
@@ -70,7 +71,15 @@ void GameStart(Settings& game, sf::RenderWindow& window)
 					{
 						board.onClick(mouse_position);
 						if (board.movesDone >= game.difficulty)
+						{
 							board.nextPlayer();
+							if (board.winner != _PLAYER_NONE_)
+							{
+								WinnerScreen(window, board.winner);
+								return;
+							}
+							ChangeScreen(window, board.getPlayer());
+						}
 					}
 
 					Button* clicked = buttList.onClick(mouse_position);

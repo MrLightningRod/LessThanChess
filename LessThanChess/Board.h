@@ -109,6 +109,7 @@ public:
 	void load(std::ifstream& in);
 	void save(std::ofstream& out);
 	void setPlayer(int pl);
+	int getPlayer();
 	void draw(sf::RenderWindow& window);
 	bool contains(sf::Vector2f pos);
 	void onCover(sf::Vector2f pos);
