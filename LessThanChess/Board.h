@@ -98,10 +98,10 @@ private:
 	Figure figures[32];
 	int player;
 	int movesPlayer[2];
-	bool moveStarted;
 	bool castling[2];
 	Move moves[2][4];
 public:
+	bool moveStarted;
 	int movesDone;
 	int winner;
 	Board();
@@ -119,4 +119,5 @@ public:
 	void onClick(sf::Vector2f pos);
 	void countMoves();
 	void nextPlayer();
+	void cancelMove();
 };

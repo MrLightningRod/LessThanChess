@@ -28,7 +28,7 @@ Settings MainMenu(sf::RenderWindow& window)
 	hard.setTrigger(true);
 	buttList.push(&hard);
 
-	Button offline("OFFLINE", sf::Vector2f(_WINDOW_WIDTH_ / 2.f - 320, 210), sf::Vector2f(200, 40));
+	Button offline("HOTSEAT", sf::Vector2f(_WINDOW_WIDTH_ / 2.f - 320, 210), sf::Vector2f(200, 40));
 	offline.setTrigger(true);
 	offline.setTriggered(true);
 	buttList.push(&offline);

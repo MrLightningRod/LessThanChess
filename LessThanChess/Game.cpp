@@ -34,17 +34,9 @@ void GameStart(Settings& game, sf::RenderWindow& window)
 	buttList.push(&save);
 
 	Button surrender("SURRENDER", sf::Vector2f(520, 740), sf::Vector2f(240, 50));
-	surrender.setActive(false);
+	surrender.setActive(true);
 	buttList.push(&surrender);
 
-	//testing
-	/*
-	sf::Vector2i pos;
-	pos.x = 1;
-	pos.y = 1;
-	board.setAvailable(pos);
-	*/
-	//
 
 	while (window.isOpen())
 	{
@@ -66,13 +58,15 @@ void GameStart(Settings& game, sf::RenderWindow& window)
 				if (event.mouseButton.button == sf::Mouse::Left)
 				{
 					sf::Vector2f mouse_position(event.mouseButton.x, event.mouseButton.y);
-
+					finish.setActive(board.movesDone > 0);
 					if (board.contains(mouse_position))
 					{
 						board.onClick(mouse_position);
+						cancel.setActive((board.movesDone > 0) || (board.moveStarted));
 						if (board.movesDone >= game.difficulty)
 						{
 							board.nextPlayer();
+							cancel.setActive((board.movesDone > 0) || (board.moveStarted));
 							if (board.winner != _PLAYER_NONE_)
 							{
 								WinnerScreen(window, board.winner);
@@ -91,6 +85,28 @@ void GameStart(Settings& game, sf::RenderWindow& window)
 						board.save(savef);
 						savef.close();
 					}
+					if (clicked == &cancel)
+					{
+						board.cancelMove();
+						cancel.setActive((board.movesDone > 0) || (board.moveStarted));
+					}
+					if ((clicked == &finish) && (board.movesDone > 0))
+					{
+						board.nextPlayer();
+						cancel.setActive((board.movesDone > 0) || (board.moveStarted));
+						if (board.winner != _PLAYER_NONE_)
+						{
+							WinnerScreen(window, board.winner);
+							return;
+						}
+						ChangeScreen(window, board.getPlayer());
+					}
+					if (clicked == &surrender)
+					{
+						WinnerScreen(window, (board.getPlayer() + 1) % 2);
+						return;
+					}
+					finish.setActive(board.movesDone > 0);
 				}
 			}
 

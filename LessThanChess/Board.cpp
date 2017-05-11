@@ -712,6 +712,7 @@ void Board::countMoves()
 void Board::nextPlayer()
 {
 	movesPlayer[player] = movesDone;
+	moveStarted = false;
 	movesDone = 0;
 	resetStat();
 	setPlayer((player + 1) % 2);
@@ -722,4 +723,50 @@ void Board::nextPlayer()
 int Board::getPlayer()
 {
 	return player;
+}
+
+void Board::cancelMove()
+{
+	if ((!moveStarted) && (movesDone == 0))
+	{
+		return;
+	}
+	int start_x;
+	int start_y;
+	int end_x;
+	int end_y;
+	bool is_castling = false;
+	if (moveStarted)
+	{
+		resetAvailable();
+	}
+	if (!moveStarted)
+	{
+		movesDone--;
+		start_x = moves[player][movesDone].start.x;
+		start_y = moves[player][movesDone].start.y;
+		end_x = moves[player][movesDone].end.x;
+		end_y = moves[player][movesDone].end.y;
+		if (squares[start_x][start_y].getFigure(player)->getType() == _FIGURE_KING_)
+		{
+			is_castling = ((start_y == end_y) && ((end_x - start_x) % 2 == 0));
+		}
+		squares[end_x][end_y].stat.movingIn[player] = false;
+		squares[end_x][end_y].stat.underAttack[player] = false;
+		if (is_castling)
+		{
+			start_x = moves[player][3].start.x;
+			start_y = moves[player][3].start.y;
+			end_x = moves[player][3].end.x;
+			end_y = moves[player][3].end.y;
+			squares[end_x][end_y].stat.movingIn[player] = false;
+			squares[end_x][end_y].stat.underAttack[player] = false;
+			squares[start_x][start_y].stat.movingOut[player] = false;
+			castling[player] = false;
+		}
+	}
+	start_x = moves[player][movesDone].start.x;
+	start_y = moves[player][movesDone].start.y;
+	squares[start_x][start_y].stat.movingOut[player] = false;
+	moveStarted = false;
 }
